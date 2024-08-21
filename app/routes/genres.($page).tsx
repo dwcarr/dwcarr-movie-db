@@ -1,11 +1,18 @@
 import { fetchMoviesByGenre } from "~/lib/movies";
-import { ClientLoaderFunctionArgs, useLoaderData } from "@remix-run/react";
+import {
+  ClientLoaderFunctionArgs,
+  redirect,
+  useLoaderData,
+} from "@remix-run/react";
 
 export const clientLoader = async ({
   request,
   params,
 }: ClientLoaderFunctionArgs) => {
-  const { page } = params as { page: string };
+  const { page } = params as { page: string | undefined };
+  if (!page) {
+    return redirect("1");
+  }
   const token = localStorage.getItem("movieAuthToken") as string;
   if (!token) {
     throw new Error("No token found");

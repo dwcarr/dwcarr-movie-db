@@ -61,11 +61,11 @@ export const fetchMovie = async (token: string, id: string) => {
 
 export const fetchMovieTitles = async (
   token: string,
-  { page, limit }: { page: number; limit: number }
+  { page, limit }: { page: number | string; limit: number }
 ) => {
   return movieApiFunction("movies/titles", token, { page, limit });
 };
 
 export const fetchGenreDetails = async (token: string, id: string) => {
-  return movieApiFunction(`genres/${id}`, token);
+  return movieApiFunction(`movies/genres/${id}`, token);
 };
