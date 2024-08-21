@@ -17,8 +17,8 @@ export const clientLoader = async ({
   if (!token) {
     throw new Error("No token found");
   }
-  const movies = await fetchMoviesByGenre(token, { page, limit: 100 });
-  return movies;
+  const genres = await fetchMoviesByGenre(token, { page, limit: 100 });
+  return genres;
 };
 
 export default function Genres() {

@@ -17,6 +17,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useMovieCounts } from "~/lib/useMovieCounts";
 const PAGE_SIZE = 24;
 
 export const clientLoader = async ({
@@ -51,6 +58,10 @@ clientLoader.hydrate = true;
 export default function Movies() {
   const { data: movies, totalPages } = useLoaderData<typeof clientLoader>();
   const { page, genre } = useParams() as { page: string; genre?: string };
+  const { genreCounts, totalMovies } = useMovieCounts();
+  console.log("genreCounts", genreCounts);
+  console.log("totalMovies", totalMovies);
+  const totalCount = genre && genreCounts ? genreCounts[genre] : totalMovies;
   const pageNumber = parseInt(page);
 
   const nextPageLink = `/movies/${pageNumber + 1}${genre ? `/${genre}` : ""}`;
@@ -61,6 +72,23 @@ export default function Movies() {
   console.log("movies", movies);
   return (
     <div className="container mx-auto py-8">
+      <div className="flex justify-end mb-4">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline">{genre || "All Genres"}</Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <Link to={"/movies/1"} prefetch="intent">
+              <DropdownMenuItem>All Genres</DropdownMenuItem>
+            </Link>
+            {Object.keys(genreCounts || {}).map((genreTitle) => (
+              <Link to={`/movies/1/${genreTitle}`} key={genreTitle}>
+                <DropdownMenuItem>{genreTitle}</DropdownMenuItem>
+              </Link>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {movies.map((movie) => (
           <Link to={`/movie/${movie.id}`} key={movie.id} prefetch="intent">
