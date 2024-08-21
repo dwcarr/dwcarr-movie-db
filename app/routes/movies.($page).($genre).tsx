@@ -5,6 +5,7 @@ import {
   redirect,
   useLoaderData,
   useParams,
+  useSearchParams,
 } from "@remix-run/react";
 import { LoaderFunctionArgs } from "@remix-run/node";
 
@@ -24,17 +25,19 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useMovieCounts } from "~/lib/useMovieCounts";
+import { Input } from "@/components/ui/input";
 const PAGE_SIZE = 24;
 
 export const clientLoader = async ({
   request,
   params,
 }: ClientLoaderFunctionArgs) => {
-  const { page, genre, search } = params as {
+  const { page, genre } = params as {
     page: string;
     genre?: string;
-    search?: string;
   };
+  const searchParams = new URLSearchParams(request.url.split("?")[1]);
+  const search = searchParams.get("search") || undefined;
 
   if (!page) {
     return redirect("1");
@@ -58,10 +61,14 @@ clientLoader.hydrate = true;
 export default function Movies() {
   const { data: movies, totalPages } = useLoaderData<typeof clientLoader>();
   const { page, genre } = useParams() as { page: string; genre?: string };
+  const [searchParams, setSearchParams] = useSearchParams();
+  const search = searchParams.get("search");
   const { genreCounts, totalMovies } = useMovieCounts();
-  console.log("genreCounts", genreCounts);
-  console.log("totalMovies", totalMovies);
-  const totalCount = genre && genreCounts ? genreCounts[genre] : totalMovies;
+  const totalCount = search
+    ? movies.length
+    : genre && genreCounts
+    ? genreCounts[genre]
+    : totalMovies;
   const pageNumber = parseInt(page);
 
   const nextPageLink = `/movies/${pageNumber + 1}${genre ? `/${genre}` : ""}`;
@@ -73,22 +80,45 @@ export default function Movies() {
   return (
     <div className="container mx-auto py-8">
       <div className="flex justify-end mb-4">
+        <div className="flex-grow mr-4">
+          <Input
+            type="text"
+            placeholder="Search movies..."
+            value={searchParams.get("search") || ""}
+            onChange={(e) => {
+              const search = e.target.value;
+              if (search) {
+                setSearchParams({ search });
+              } else {
+                searchParams.delete("search");
+                setSearchParams(searchParams);
+              }
+            }}
+          />
+        </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline">{genre || "All Genres"}</Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <Link to={"/movies/1"} prefetch="intent">
-              <DropdownMenuItem>All Genres</DropdownMenuItem>
+              <DropdownMenuItem>All Genres ({totalMovies})</DropdownMenuItem>
             </Link>
             {Object.keys(genreCounts || {}).map((genreTitle) => (
               <Link to={`/movies/1/${genreTitle}`} key={genreTitle}>
-                <DropdownMenuItem>{genreTitle}</DropdownMenuItem>
+                <DropdownMenuItem>
+                  {genreTitle + " (" + genreCounts![genreTitle] + ")"}
+                </DropdownMenuItem>
               </Link>
             ))}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+      <p className="mb-4 text-lg">
+        {search
+          ? `Your search returned ${totalCount} movies`
+          : `Showing ${totalCount} movies${genre ? ` in ${genre}` : ""}`}
+      </p>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {movies.map((movie) => (
           <Link to={`/movie/${movie.id}`} key={movie.id} prefetch="intent">
