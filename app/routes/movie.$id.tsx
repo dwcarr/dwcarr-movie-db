@@ -32,8 +32,6 @@ export default function Movie() {
   const navigate = useNavigate();
   const movie = useLoaderData<typeof clientLoader>();
 
-  console.log(movie);
-
   return (
     <div className="container mx-auto py-8">
       <Card className="overflow-hidden">

@@ -1,5 +1,7 @@
 import type { MetaFunction } from "@remix-run/node";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { useEffect } from "react";
+import { useNavigate } from "@remix-run/react";
 
 export const meta: MetaFunction = () => {
   return [
@@ -9,12 +11,13 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Index() {
+  const navigate = useNavigate();
+  useEffect(() => {
+    navigate("/movies/1");
+  }, []);
   return (
-    <Alert>
-      <AlertTitle>Heads up!</AlertTitle>
-      <AlertDescription>
-        You can add components and dependencies to your app using the cli.
-      </AlertDescription>
-    </Alert>
+    <div className="flex items-center justify-center h-screen">
+      <h1 className="text-6xl font-bold">Movie Time</h1>
+    </div>
   );
 }

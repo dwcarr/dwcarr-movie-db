@@ -79,6 +79,11 @@ export default function Movies() {
   console.log("movies", movies);
   return (
     <div className="container mx-auto py-8">
+      <div className="bg-primary text-primary-foreground py-16 mb-8 text-left">
+        <div className="container mx-auto">
+          <h1 className="text-7xl font-bold">Movie Time</h1>
+        </div>
+      </div>
       <div className="flex justify-end mb-4">
         <div className="flex-grow mr-4">
           <Input
@@ -156,9 +161,11 @@ export default function Movies() {
             Next
           </Button>
         </Link>
-        <Button variant="outline" disabled={parseInt(page) === totalPages}>
-          Last
-        </Button>
+        <Link to={`/movies/${totalPages}`} prefetch="intent">
+          <Button variant="outline" disabled={parseInt(page) === totalPages}>
+            Last
+          </Button>
+        </Link>
       </div>
     </div>
   );
