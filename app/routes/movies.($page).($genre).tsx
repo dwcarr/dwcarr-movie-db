@@ -50,7 +50,14 @@ clientLoader.hydrate = true;
 
 export default function Movies() {
   const { data: movies, totalPages } = useLoaderData<typeof clientLoader>();
-  const { page } = useParams() as { page: string };
+  const { page, genre } = useParams() as { page: string; genre?: string };
+  const pageNumber = parseInt(page);
+
+  const nextPageLink = `/movies/${pageNumber + 1}${genre ? `/${genre}` : ""}`;
+  const previousPageLink =
+    pageNumber > 1
+      ? `/movies/${pageNumber - 1}${genre ? `/${genre}` : ""}`
+      : null;
   console.log("movies", movies);
   return (
     <div className="container mx-auto py-8">
@@ -73,18 +80,24 @@ export default function Movies() {
         ))}
       </div>
       <div className="flex justify-between items-center mt-8">
-        <Button variant="outline" disabled={page === "1"}>
-          First
-        </Button>
-        <Button variant="outline" disabled={page === "1"}>
-          Previous
-        </Button>
+        <Link to={"/movies/1"} prefetch="intent">
+          <Button variant="outline" disabled={page === "1"}>
+            First
+          </Button>
+        </Link>
+        <Link to={previousPageLink || ""} prefetch="intent">
+          <Button variant="outline" disabled={page === "1"}>
+            Previous
+          </Button>
+        </Link>
         <span>
           Page {page} of {totalPages}
         </span>
-        <Button variant="outline" disabled={parseInt(page) === totalPages}>
-          Next
-        </Button>
+        <Link to={nextPageLink} prefetch="intent">
+          <Button variant="outline" disabled={parseInt(page) === totalPages}>
+            Next
+          </Button>
+        </Link>
         <Button variant="outline" disabled={parseInt(page) === totalPages}>
           Last
         </Button>
