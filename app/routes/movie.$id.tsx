@@ -1,5 +1,9 @@
 import { fetchMovie } from "~/lib/movies";
-import { ClientLoaderFunctionArgs, useLoaderData } from "@remix-run/react";
+import {
+  ClientLoaderFunctionArgs,
+  useLoaderData,
+  useNavigate,
+} from "@remix-run/react";
 import { FetchMovieResponse } from "~/lib/types";
 import {
   Card,
@@ -9,6 +13,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 export const clientLoader = async ({
   request,
@@ -24,8 +29,11 @@ export const clientLoader = async ({
 };
 
 export default function Movie() {
+  const navigate = useNavigate();
   const movie = useLoaderData<typeof clientLoader>();
+
   console.log(movie);
+
   return (
     <div className="container mx-auto py-8">
       <Card className="overflow-hidden">
@@ -39,7 +47,10 @@ export default function Movie() {
               />
             </CardContent>
           </div>
+
           <div className="md:w-2/3 p-6">
+            <Button onClick={() => navigate(-1)}>Back</Button>
+
             <CardHeader>
               <CardTitle className="text-3xl font-bold">
                 {movie.title}
