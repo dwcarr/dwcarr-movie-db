@@ -1,6 +1,14 @@
 import { fetchMovie } from "~/lib/movies";
 import { ClientLoaderFunctionArgs, useLoaderData } from "@remix-run/react";
 import { FetchMovieResponse } from "~/lib/types";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export const clientLoader = async ({
   request,
@@ -16,7 +24,80 @@ export const clientLoader = async ({
 };
 
 export default function Movie() {
-  const data = useLoaderData<typeof clientLoader>();
-  console.log(data);
-  return <div>{data.title}</div>;
+  const movie = useLoaderData<typeof clientLoader>();
+  console.log(movie);
+  return (
+    <div className="container mx-auto py-8">
+      <Card className="overflow-hidden">
+        <div className="flex flex-col md:flex-row">
+          <div className="md:w-1/3">
+            <CardContent className="p-0">
+              <img
+                src={movie.posterUrl}
+                alt={movie.title}
+                className="w-full h-auto"
+              />
+            </CardContent>
+          </div>
+          <div className="md:w-2/3 p-6">
+            <CardHeader>
+              <CardTitle className="text-3xl font-bold">
+                {movie.title}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 gap-4 mb-6">
+                {movie.datePublished && (
+                  <div>
+                    <h2 className="text-lg font-semibold">Release Date</h2>
+                    <p>{movie.datePublished}</p>
+                  </div>
+                )}
+                {movie.duration && (
+                  <div>
+                    <h2 className="text-lg font-semibold">Runtime</h2>
+                    <p>{movie.duration} minutes</p>
+                  </div>
+                )}
+                {movie.rating && (
+                  <div>
+                    <h2 className="text-lg font-semibold">Rating</h2>
+                    <p>{movie.rating}</p>
+                  </div>
+                )}
+                {movie.genres && (
+                  <div>
+                    <h2 className="text-lg font-semibold">Genres</h2>
+                    <p>{movie.genres.map((genre) => genre.title).join(", ")}</p>
+                  </div>
+                )}
+              </div>
+              {movie.summary && (
+                <>
+                  <h2 className="text-2xl font-bold mb-2">Overview</h2>
+                  <p className="mb-6">{movie.summary}</p>
+                </>
+              )}
+              {movie.mainActors && (
+                <>
+                  <h2 className="text-2xl font-bold mb-2">Cast</h2>
+                  <ul className="list-disc list-inside mb-6">
+                    {movie.mainActors.slice(0, 5).map((actor) => (
+                      <li key={actor}>{actor}</li>
+                    ))}
+                  </ul>
+                </>
+              )}
+              {movie.directors && (
+                <>
+                  <h2 className="text-2xl font-bold mb-2">Director(s)</h2>
+                  <p>{movie.directors.join(", ")}</p>
+                </>
+              )}
+            </CardContent>
+          </div>
+        </div>
+      </Card>
+    </div>
+  );
 }

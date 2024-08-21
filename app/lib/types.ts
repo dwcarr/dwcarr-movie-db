@@ -31,7 +31,10 @@ export type FetchMovieResponse = {
   rating: string;
   ratingValue: string;
   datePublished: string;
-  genres: string[];
+  genres: {
+    id: string;
+    title: string;
+  }[];
   summary: string;
 };
 
