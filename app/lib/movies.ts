@@ -33,7 +33,7 @@ export const healthCheck = async () => {
 
 export const fetchMoviesByGenre = async (
   token: string,
-  { page, limit }: { page: number; limit: number }
+  { page, limit }: { page: number | string; limit: number }
 ) => {
   return movieApiFunction(`genres/movies`, token, { page, limit });
 };
@@ -45,7 +45,7 @@ export const fetchMovies = async (
     limit,
     search = "",
     genre = "",
-  }: { page: number; limit: number; search?: string; genre?: string }
+  }: { page: number | string; limit: number; search?: string; genre?: string }
 ) => {
   return (await movieApiFunction("movies", token, {
     page,
