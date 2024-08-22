@@ -50,3 +50,4 @@ The design of the app is minimal and clean, aiming for functionality over aesthe
 - Add a dark mode to the app
 - Implement automated testing
 - Aesthetic improvements (through collaboration with a designer)
+- Move token to cookie storage for security
