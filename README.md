@@ -35,6 +35,8 @@ The user can also select a genre from the dropdown at the top of the page. The g
 
 The user can also click on a movie to see more information about it. This information includes the movie's title, summary, poster, duration, rating, and genre. The user can also click on the "Back" button to return to the movies listing page.
 
+### Prefetching
+
 All of the links on the page are prefetched, meaning that the data for the page is fetched in the background just before the user navigates to the page. This is done using the `Link` component from remix with `prefetch="intent"`. This is a powerful feature that allows us to fetch data for a page as the user's cursor hovers over the link. This can greatly improve the user experience, as the data will be ready by the time the user navigates to the page, making the page feel more responsive.
 
 ## Design
