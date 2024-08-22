@@ -2,6 +2,13 @@ import { FetchMoviesResponse } from "./types";
 
 const baseUrl = "https://0kadddxyh3.execute-api.us-east-1.amazonaws.com";
 
+/**
+ * @description A function that makes a request to the movie API.
+ * @param {string} path - The path to the API endpoint.
+ * @param {string} token - The token to use for the request.
+ * @param {Record<string, string | number>} searchParams - The search parameters to use for the request.
+ * @returns {Promise<any>} The response from the API.
+ */
 export const movieApiFunction = async (
   path: string,
   token?: string,
