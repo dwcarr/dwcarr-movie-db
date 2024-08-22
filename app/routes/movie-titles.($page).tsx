@@ -23,6 +23,5 @@ export const clientLoader = async ({
 
 export default function MovieTitles() {
   const data = useLoaderData<typeof clientLoader>();
-  console.log(data);
   return <div>{data.data.length}</div>;
 }

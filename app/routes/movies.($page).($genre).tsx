@@ -76,7 +76,6 @@ export default function Movies() {
     pageNumber > 1
       ? `/movies/${pageNumber - 1}${genre ? `/${genre}` : ""}`
       : null;
-  console.log("movies", movies);
   return (
     <div className="container mx-auto py-8">
       <div className="bg-primary text-primary-foreground py-16 mb-8 text-left">

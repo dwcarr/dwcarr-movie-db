@@ -22,15 +22,8 @@ export const clientLoader = async ({ request }: ClientLoaderFunctionArgs) => {
     }
     localStorage.setItem("movieAuthToken", token);
   }
-  console.log("token", token);
   return { token };
 };
-
-// export const loader = async ({ request }: LoaderFunctionArgs) => {
-//   const token = (await fetchToken()) as string;
-//   console.log("token", token);
-//   return { token };
-// };
 
 clientLoader.hydrate = true;
 

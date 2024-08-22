@@ -31,7 +31,27 @@ export const clientLoader = async ({
 export default function Movie() {
   const navigate = useNavigate();
   const movie = useLoaderData<typeof clientLoader>();
-
+  const duration = movie.duration;
+  const durationString = duration
+    ? duration.replace(/PT(?:(\d+)H)?(?:(\d+)M)?/, (_, hours, minutes) => {
+        let result = "";
+        if (hours) {
+          result += `${hours} hour${hours !== "1" ? "s" : ""} `;
+        }
+        if (minutes) {
+          result += `${minutes} minute${minutes !== "1" ? "s" : ""}`;
+        }
+        return result.trim();
+      })
+    : null;
+  const publishedDate = movie.datePublished;
+  const formattedDate = publishedDate
+    ? new Date(publishedDate).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      })
+    : null;
   return (
     <div className="container mx-auto py-8">
       <Card className="overflow-hidden">
@@ -47,7 +67,9 @@ export default function Movie() {
           </div>
 
           <div className="md:w-2/3 p-6">
-            <Button onClick={() => navigate(-1)}>Back</Button>
+            <Button variant="outline" onClick={() => navigate(-1)}>
+              Back
+            </Button>
 
             <CardHeader>
               <CardTitle className="text-3xl font-bold">
@@ -59,13 +81,13 @@ export default function Movie() {
                 {movie.datePublished && (
                   <div>
                     <h2 className="text-lg font-semibold">Release Date</h2>
-                    <p>{movie.datePublished}</p>
+                    <p>{formattedDate}</p>
                   </div>
                 )}
-                {movie.duration && (
+                {duration && (
                   <div>
                     <h2 className="text-lg font-semibold">Runtime</h2>
-                    <p>{movie.duration} minutes</p>
+                    <p>{durationString}</p>
                   </div>
                 )}
                 {movie.rating && (

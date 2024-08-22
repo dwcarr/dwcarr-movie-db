@@ -16,6 +16,5 @@ export const clientLoader = async ({
 
 export default function GenreDetails() {
   const data = useLoaderData<typeof clientLoader>();
-  console.log(data);
   return <div>{data.name}</div>;
 }

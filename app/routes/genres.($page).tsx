@@ -5,6 +5,8 @@ import {
   useLoaderData,
 } from "@remix-run/react";
 
+const PAGE_SIZE = 100;
+
 export const clientLoader = async ({
   request,
   params,
@@ -17,12 +19,11 @@ export const clientLoader = async ({
   if (!token) {
     throw new Error("No token found");
   }
-  const genres = await fetchMoviesByGenre(token, { page, limit: 100 });
+  const genres = await fetchMoviesByGenre(token, { page, limit: PAGE_SIZE });
   return genres;
 };
 
 export default function Genres() {
   const data = useLoaderData<typeof clientLoader>();
-  console.log("data", data);
   return <div>genres</div>;
 }
